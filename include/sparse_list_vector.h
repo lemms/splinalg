@@ -24,6 +24,7 @@ public:
     void push_back(const C& c, const T& t);
 
     T get(const C& c) const;
+    size_t size() const;
 };
 
 template <typename C, typename T>
@@ -42,6 +43,11 @@ T ListVector<C, T>::get(const C& c) const {
         iterator++;
     }
     return static_cast<T>(0);
+}
+
+template <typename C, typename T>
+size_t ListVector<C, T>::size() const {
+    return _values.size();
 }
 
 } // namespace sparse
