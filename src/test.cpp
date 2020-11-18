@@ -5,11 +5,22 @@
 
 #include "sparse_csr_mat.h"
 #include "sparse_csr_mat_operations.h"
-#include "sparse_map_vector.h"
 #include "sparse_list_vector.h"
+#include "sparse_map_vector.h"
 
 int main(int argc, char** argv) {
     std::cout << "Test Sparse Linear Algebra Library." << std::endl;
+
+    sparse::ListVector<int, float> list_vector;
+    list_vector.push_back(1, 1.0f);
+    list_vector.push_back(2, 2.0f);
+    list_vector.push_back(3, 3.0f);
+
+    std::cout << "List Vector: "
+        << list_vector.get(0) << ", "
+        << list_vector.get(1) << ", "
+        << list_vector.get(2) << ", "
+        << list_vector.get(3) << std::endl;
 
     sparse::MapVector<int, float> map_vector;
     map_vector.insert(1, 1.0f);
@@ -22,16 +33,6 @@ int main(int argc, char** argv) {
         << map_vector.get(2) << ", "
         << map_vector.get(3) << std::endl;
 
-    sparse::ListVector<int, float> list_vector;
-    list_vector.push_back(1, 1.0f);
-    list_vector.push_back(2, 2.0f);
-    list_vector.push_back(3, 3.0f);
-
-    std::cout << "List Vector: "
-        << list_vector.get(0) << ", "
-        << list_vector.get(1) << ", "
-        << list_vector.get(2) << ", "
-        << list_vector.get(3) << std::endl;
 
     sparse::CSRMatrix<int, float> csr_matrix;
 
@@ -58,15 +59,25 @@ int main(int argc, char** argv) {
         << csr_matrix.get(3, 2) << ", "
         << csr_matrix.get(3, 3) << std::endl;
 
-    sparse::ListVector<int, float> mul_vector;
+    sparse::ListVector<int, float> list_mul_vector;
 
-    sparse::matmul(mul_vector, csr_matrix, list_vector);
+    sparse::matmul(list_mul_vector, csr_matrix, list_vector);
 
-    std::cout << "Mul Vector: "
-        << mul_vector.get(0) << ", "
-        << mul_vector.get(1) << ", "
-        << mul_vector.get(2) << ", "
-        << mul_vector.get(3) << std::endl;
+    std::cout << "List mul Vector: "
+        << list_mul_vector.get(0) << ", "
+        << list_mul_vector.get(1) << ", "
+        << list_mul_vector.get(2) << ", "
+        << list_mul_vector.get(3) << std::endl;
+
+    sparse::MapVector<int, float> map_mul_vector;
+
+    sparse::matmul(map_mul_vector, csr_matrix, map_vector);
+
+    std::cout << "Map mul Vector: "
+        << map_mul_vector.get(0) << ", "
+        << map_mul_vector.get(1) << ", "
+        << map_mul_vector.get(2) << ", "
+        << map_mul_vector.get(3) << std::endl;
 
     return 0;
 }

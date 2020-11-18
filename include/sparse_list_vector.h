@@ -17,8 +17,8 @@ public:
 
     typename std::vector<std::pair<C, T>>::iterator begin() {return _values.begin();}
     typename std::vector<std::pair<C, T>>::iterator end() {return _values.end();}
-    typename std::vector<std::pair<C, T>>::const_iterator cbegin() {return _values.cbegin();}
-    typename std::vector<std::pair<C, T>>::const_iterator cend() {return _values.cend();}
+    typename std::vector<std::pair<C, T>>::const_iterator cbegin() const {return _values.cbegin();}
+    typename std::vector<std::pair<C, T>>::const_iterator cend() const {return _values.cend();}
 
     // Values must be inserted in coordinate order
     void push_back(const C& c, const T& t);
