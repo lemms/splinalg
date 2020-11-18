@@ -60,4 +60,29 @@ void matmul(MapVector<C, T>& out, const CSRMatrix<C, T>& mat, const MapVector<C,
     }
 }
 
+// out must be an empty matrix
+template <typename C, typename T>
+void matmul(CSRMatrix<C, T>& out, const CSRMatrix<C, T>& lhs, const CSRMatrix<C, T>& rhs)
+{
+    assert(lhs.num_cols() == rhs.num_rows());
+    for (int i = 0, i_end = lhs.num_rows(); i < i_end; ++i) {
+        out.add_row();
+        for (int j = 0, j_end = rhs.num_cols(); j < j_end; ++j) {
+            typename std::vector<C>::const_iterator col_begin = lhs.crow_begin_col(i);
+            typename std::vector<C>::const_iterator col_end = lhs.crow_end_col(i);
+            typename std::vector<T>::const_iterator col_value = lhs.crow_begin(i);
+
+            if (col_begin == col_end) {
+                // Empty row
+                continue;
+            }
+            T acc = static_cast<T>(0);
+            for (; col_begin != col_end; ++col_begin, ++col_value) {
+                acc += *col_value * rhs.get(*col_begin, j);
+            }
+            out.push(j, acc);
+        }
+    }
+}
+
 } // namespace sparse

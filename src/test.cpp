@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
         << map_vector.get(3) << std::endl;
 
 
-    sparse::CSRMatrix<int, float> csr_matrix;
+    sparse::CSRMatrix<int, float> csr_matrix(4, 4);
 
     csr_matrix.push_back_row({0}, {1.0f});
     csr_matrix.push_back_row({1}, {2.0f});
@@ -78,6 +78,53 @@ int main(int argc, char** argv) {
         << map_mul_vector.get(1) << ", "
         << map_mul_vector.get(2) << ", "
         << map_mul_vector.get(3) << std::endl;
+
+    sparse::CSRMatrix<int, float> mul_matrix(4, 4);
+
+    mul_matrix.push_back_row({0, 1, 2, 3}, {1.0f, 2.0f, 3.0f, 4.0f});
+    mul_matrix.push_back_row({0, 1, 2, 3}, {5.0f, 6.0f, 7.0f, 8.0f});
+    mul_matrix.push_back_row({0, 1, 2, 3}, {9.0f, 10.0f, 11.0f, 12.0f});
+    mul_matrix.push_back_row({0, 1, 2, 3}, {13.0f, 14.0f, 15.0f, 16.0f});
+
+    std::cout << "Mul Matrix:" << std::endl;
+    std::cout << mul_matrix.get(0, 0) << ", "
+        << mul_matrix.get(0, 1) << ", "
+        << mul_matrix.get(0, 2) << ", "
+        << mul_matrix.get(0, 3) << std::endl;
+    std::cout << mul_matrix.get(1, 0) << ", "
+        << mul_matrix.get(1, 1) << ", "
+        << mul_matrix.get(1, 2) << ", "
+        << mul_matrix.get(1, 3) << std::endl;
+    std::cout << mul_matrix.get(2, 0) << ", "
+        << mul_matrix.get(2, 1) << ", "
+        << mul_matrix.get(2, 2) << ", "
+        << mul_matrix.get(2, 3) << std::endl;
+    std::cout << mul_matrix.get(3, 0) << ", "
+        << mul_matrix.get(3, 1) << ", "
+        << mul_matrix.get(3, 2) << ", "
+        << mul_matrix.get(3, 3) << std::endl;
+
+    sparse::CSRMatrix<int, float> out_mul_matrix(4, 4);
+
+    sparse::matmul(out_mul_matrix, mul_matrix, mul_matrix);
+
+    std::cout << "Out mul Matrix:" << std::endl;
+    std::cout << out_mul_matrix.get(0, 0) << ", "
+        << out_mul_matrix.get(0, 1) << ", "
+        << out_mul_matrix.get(0, 2) << ", "
+        << out_mul_matrix.get(0, 3) << std::endl;
+    std::cout << out_mul_matrix.get(1, 0) << ", "
+        << out_mul_matrix.get(1, 1) << ", "
+        << out_mul_matrix.get(1, 2) << ", "
+        << out_mul_matrix.get(1, 3) << std::endl;
+    std::cout << out_mul_matrix.get(2, 0) << ", "
+        << out_mul_matrix.get(2, 1) << ", "
+        << out_mul_matrix.get(2, 2) << ", "
+        << out_mul_matrix.get(2, 3) << std::endl;
+    std::cout << out_mul_matrix.get(3, 0) << ", "
+        << out_mul_matrix.get(3, 1) << ", "
+        << out_mul_matrix.get(3, 2) << ", "
+        << out_mul_matrix.get(3, 3) << std::endl;
 
     return 0;
 }
