@@ -9,4 +9,4 @@ test: $(OBJS)
 	$(CC) -o $@ -c $<
 
 .phony clean:
-	rm -f $(OBJS)
+	rm -f test $(OBJS)
