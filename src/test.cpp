@@ -3,10 +3,11 @@
 
 #include <iostream>
 
+#include "sparse_csc_mat.h"
 #include "sparse_csr_mat.h"
-#include "sparse_csr_mat_operations.h"
 #include "sparse_list_vector.h"
 #include "sparse_map_vector.h"
+#include "sparse_mat_operations.h"
 
 int main(int argc, char** argv) {
     std::cout << "Test Sparse Linear Algebra Library." << std::endl;
@@ -108,7 +109,72 @@ int main(int argc, char** argv) {
 
     sparse::matmul(out_mul_matrix, mul_matrix, mul_matrix);
 
-    std::cout << "Out mul Matrix:" << std::endl;
+    std::cout << "Out Mul Matrix:" << std::endl;
+    std::cout << out_mul_matrix.get(0, 0) << ", "
+        << out_mul_matrix.get(0, 1) << ", "
+        << out_mul_matrix.get(0, 2) << ", "
+        << out_mul_matrix.get(0, 3) << std::endl;
+    std::cout << out_mul_matrix.get(1, 0) << ", "
+        << out_mul_matrix.get(1, 1) << ", "
+        << out_mul_matrix.get(1, 2) << ", "
+        << out_mul_matrix.get(1, 3) << std::endl;
+    std::cout << out_mul_matrix.get(2, 0) << ", "
+        << out_mul_matrix.get(2, 1) << ", "
+        << out_mul_matrix.get(2, 2) << ", "
+        << out_mul_matrix.get(2, 3) << std::endl;
+    std::cout << out_mul_matrix.get(3, 0) << ", "
+        << out_mul_matrix.get(3, 1) << ", "
+        << out_mul_matrix.get(3, 2) << ", "
+        << out_mul_matrix.get(3, 3) << std::endl;
+
+    sparse::CSCMatrix<int, float> csc_mul_matrix(4, 4);
+
+    csc_mul_matrix.push_back_col({0, 1, 2, 3}, {1.0f, 5.0f, 9.0f, 13.0f});
+    csc_mul_matrix.push_back_col({0, 1, 2, 3}, {2.0f, 6.0f, 10.0f, 14.0f});
+    csc_mul_matrix.push_back_col({0, 1, 2, 3}, {3.0f, 7.0f, 11.0f, 15.0f});
+    csc_mul_matrix.push_back_col({0, 1, 2, 3}, {4.0f, 8.0f, 12.0f, 16.0f});
+
+    std::cout << "CSC Mul Matrix:" << std::endl;
+    std::cout << csc_mul_matrix.get(0, 0) << ", "
+        << csc_mul_matrix.get(0, 1) << ", "
+        << csc_mul_matrix.get(0, 2) << ", "
+        << csc_mul_matrix.get(0, 3) << std::endl;
+    std::cout << csc_mul_matrix.get(1, 0) << ", "
+        << csc_mul_matrix.get(1, 1) << ", "
+        << csc_mul_matrix.get(1, 2) << ", "
+        << csc_mul_matrix.get(1, 3) << std::endl;
+    std::cout << csc_mul_matrix.get(2, 0) << ", "
+        << csc_mul_matrix.get(2, 1) << ", "
+        << csc_mul_matrix.get(2, 2) << ", "
+        << csc_mul_matrix.get(2, 3) << std::endl;
+    std::cout << csc_mul_matrix.get(3, 0) << ", "
+        << csc_mul_matrix.get(3, 1) << ", "
+        << csc_mul_matrix.get(3, 2) << ", "
+        << csc_mul_matrix.get(3, 3) << std::endl;
+
+    out_mul_matrix.clear();
+
+    std::cout << "Cleared Out Mul Matrix:" << std::endl;
+    std::cout << out_mul_matrix.get(0, 0) << ", "
+        << out_mul_matrix.get(0, 1) << ", "
+        << out_mul_matrix.get(0, 2) << ", "
+        << out_mul_matrix.get(0, 3) << std::endl;
+    std::cout << out_mul_matrix.get(1, 0) << ", "
+        << out_mul_matrix.get(1, 1) << ", "
+        << out_mul_matrix.get(1, 2) << ", "
+        << out_mul_matrix.get(1, 3) << std::endl;
+    std::cout << out_mul_matrix.get(2, 0) << ", "
+        << out_mul_matrix.get(2, 1) << ", "
+        << out_mul_matrix.get(2, 2) << ", "
+        << out_mul_matrix.get(2, 3) << std::endl;
+    std::cout << out_mul_matrix.get(3, 0) << ", "
+        << out_mul_matrix.get(3, 1) << ", "
+        << out_mul_matrix.get(3, 2) << ", "
+        << out_mul_matrix.get(3, 3) << std::endl;
+
+    sparse::matmul(out_mul_matrix, mul_matrix, csc_mul_matrix);
+
+    std::cout << "Mixed Out Mul Matrix:" << std::endl;
     std::cout << out_mul_matrix.get(0, 0) << ", "
         << out_mul_matrix.get(0, 1) << ", "
         << out_mul_matrix.get(0, 2) << ", "

@@ -46,6 +46,8 @@ public:
     size_t size() const;
     size_t num_rows() const;
     size_t num_cols() const;
+
+    void clear();
 };
 
 template <typename C, typename T>
@@ -147,11 +149,13 @@ void CSRMatrix<C, T>::push_back_row(
 template <typename C, typename T>
 T CSRMatrix<C, T>::get(const C& i, const C& j) const
 {
-    C row_start = _rows[i];
-    C row_end = _rows[i + 1];
-    for (C c = row_start; c < row_end; ++c) {
-        if (_columns[c] == j) {
-            return _values[c];
+    if (i < static_cast<C>(_rows.size() - 1)) {
+        C row_start = _rows[i];
+        C row_end = _rows[i + 1];
+        for (C c = row_start; c < row_end; ++c) {
+            if (_columns[c] == j) {
+                return _values[c];
+            }
         }
     }
     return static_cast<T>(0);
@@ -174,6 +178,16 @@ template <typename C, typename T>
 size_t CSRMatrix<C, T>::num_cols() const
 {
     return _num_cols;
+}
+
+template <typename C, typename T>
+void CSRMatrix<C, T>::clear()
+{
+    _current_row_end = 0;
+    _values.clear();
+    _columns.clear();
+    _rows.clear();
+    _rows.push_back(static_cast<C>(0));
 }
 
 } // namespace sparse

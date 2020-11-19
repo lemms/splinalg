@@ -1,9 +1,12 @@
-// sparse_csr_mat_operations.h
+// sparse_mat_operations.h
 // Copyright Laurence Emms 2020
 
 #pragma once
 
 namespace sparse {
+
+template <typename C, typename T>
+class CSCMatrix;
 
 template <typename C, typename T>
 class CSRMatrix;
@@ -79,6 +82,43 @@ void matmul(CSRMatrix<C, T>& out, const CSRMatrix<C, T>& lhs, const CSRMatrix<C,
             T acc = static_cast<T>(0);
             for (; col_begin != col_end; ++col_begin, ++col_value) {
                 acc += *col_value * rhs.get(*col_begin, j);
+            }
+            out.push(j, acc);
+        }
+    }
+}
+
+// out must be an empty matrix
+template <typename C, typename T>
+void matmul(CSRMatrix<C, T>& out, const CSRMatrix<C, T>& lhs, const CSCMatrix<C, T>& rhs)
+{
+    assert(lhs.num_cols() == rhs.num_rows());
+    for (int i = 0, i_end = lhs.num_rows(); i < i_end; ++i) {
+        out.add_row();
+        for (int j = 0, j_end = rhs.num_cols(); j < j_end; ++j) {
+            typename std::vector<C>::const_iterator col_begin = lhs.crow_begin_col(i);
+            typename std::vector<C>::const_iterator col_end = lhs.crow_end_col(i);
+            typename std::vector<T>::const_iterator col_value = lhs.crow_begin(i);
+
+            if (col_begin == col_end) {
+                // Empty row
+                continue;
+            }
+            T acc = static_cast<T>(0);
+            typename std::vector<C>::const_iterator rhs_row_begin = rhs.ccol_begin_row(j);
+            typename std::vector<C>::const_iterator rhs_row_end = rhs.ccol_end_row(j);
+            typename std::vector<T>::const_iterator rhs_row_value = rhs.ccol_begin(j);
+            for (; col_begin != col_end; ++col_begin, ++col_value) {
+                while (*rhs_row_begin < *col_begin) {
+                    ++rhs_row_begin;
+                    ++rhs_row_value;
+                }
+                if (rhs_row_begin == rhs_row_end) {
+                    break;
+                }
+                if (*rhs_row_begin == *col_begin) {
+                    acc += *col_value * *rhs_row_value;
+                }
             }
             out.push(j, acc);
         }
